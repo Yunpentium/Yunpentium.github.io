@@ -1,14 +1,20 @@
 
-# Linux
+# C/C++
 
 
-# 嵌入式(DSP/FPGA/ARM)软硬件
+# 数据结构
 
-# 信号处理与机器学习
-- [Kalman滤波器从原理到实现](https://github.com/xiahouzuoxin/notes)
+
+# Linux系统
+
+# DM6437/DM6446开发平台
+
+
+# 图像处理
 
 
 # 磨刀不误砍柴工
 
 
 # 读书写作
+- [Word2016中给公式自动编号](https://github.com/xiahouzuoxin/notes)
