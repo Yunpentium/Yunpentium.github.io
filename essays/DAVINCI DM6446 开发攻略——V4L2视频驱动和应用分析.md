@@ -82,7 +82,7 @@ videodev.c
 	clean:
 	      rm -f *.o *~ core tvp5146_v4l2_mmap
    
-####**2、下面通过分析v4l2_mmap_loopback.c的源码，从应用层的角度讨论V4L2的原理**
+#### **2、下面通过分析v4l2_mmap_loopback.c的源码，从应用层的角度讨论V4L2的原理**
  
 	#include <stdio.h>
 	#include <fcntl.h>
@@ -142,7 +142,7 @@ videodev.c
 	#define ATTRIB_OUTPUT          "output"
 	 
 	#define LOOP_COUNT        500 本例子采集多少帧就停止运行（PAL制每秒25帧）
-####**3、V4L2的操作流程**
+#### **3、V4L2的操作流程**
 **Video4linux2（简称V4L2)**，是linux中关于视频设备的内核驱动。在Linux中，视频设备是设备文件，可以像访问普通文件一样对其进行读写，摄像头在/dev/video0下。
 
 **Video4linux2一般操作流程（视频设备）：**
@@ -173,7 +173,7 @@ VIDIOC_S_STD,VIDIOC_S_FMT,struct v4l2_std_id,struct v4l2_format
 	struct v4l2_control control;//具体控制的值
  
 从main()函数调用vpbe_UE_1（），在vpbe_UE_1（）里，可以看到采集流程和显示输出流程。
-####**4、V4L2采集过程**
+#### **4、V4L2采集过程**
 initialize_capture（）里初始化采集配置、分配采集内存缓冲、启动开始采集。顺序调用init_capture_device（）+set_data_format（），init_capture_buffers（），start_streaming（）。
    
 **1)、打开视频设备**
@@ -277,7 +277,7 @@ read、write方式:在用户空间和内核空间不断拷贝数据，占用了�
 	使用close函数关闭一个视频设备
 	close(fdCapture)
  
-####**4、V4L2显示输出**
+#### **4、V4L2显示输出**
  
 配置视频显示输出函数init_vid1_device（），初始化和采集差不多，这里就不用多解析，这个显示输出的例子通过DAC口，把采集的图像通过LOOPBACK方式，直接输出到普通电视机或DVD等视频IN的端口里，当然你的板子要有把DM6446 DAC信号通过视频放大器才能接到电视机上。从start_loop()函数里，下面的代码
 
