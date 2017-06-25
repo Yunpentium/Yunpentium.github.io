@@ -4,7 +4,7 @@
 
 针对DAVINCI DM6446平台，网络上也有很多网友写了V4L2的驱动，但只是解析Montavista linux-2.6.10 V4L2的原理、结构和函数，深度不够。本文决定把Montavista 的Linux-2.6.18 V4L2好好分析一下，顺便讲解在产品中的应用，满足一些客户提出要求，毕竟V4L2是LINUX一个很重要的视频驱动，适合很多嵌入式芯片平台。本文首先讲解DM6446 DAVINCI视频处理技术的硬件工作原理，然后讲解DM6446 V4L2采集驱动和输出驱动，然后对TI DVSDK2.0里边提供的V4L2的例子进行详细讲解，怎样和驱动配合起来。
  
-## 第一节 DAVINCI视频处理硬件   
+### 第一节 DAVINCI视频处理硬件   
 
 有关DM6446 DAVINCI视频处理技术，有两个文档：VPFE sprue38ec.pdf和VPBE sprue37c.pdf，必须要看看的。下图是DAVINCI视频处理技术的框图，VPSS（视频处理子系统）包含VPFE和VPBE，VPFE负责前端视频采集和处理，而VPBE负责后端视频输出，通过OSD和VECN直接输出到DACS（数字转模拟输出口，一共4个通道DAC，通过外围视频编码芯片转换成复合视频CVBS输出到普通电视机）或者直接输出到LCD（DM6446支持RGB24位信号输出到数字LCD屏，4.3寸，7寸屏等）。
 
@@ -18,7 +18,7 @@ VPBE系统可以对处理后的视频（VIDEO）数据或图像(IMAGE)进行处�
 
 VPFE和VPBE所有的数据交换都是在DDR上处理，VPFE采集的视频数据，比如YUV422格式（U0Y0V0Y1）都有指定的DDR地址，而VPBE也有另外指定的DDR地址。
  
-###**第二节   V4L2采集驱动**
+### **第二节   V4L2采集驱动**
  
 对应上面的硬件处理过程，软件工程师最关心的是如何配置VPFE和VPBE的寄存器，如何实现DDR的视频数据视频缓冲处理，在LINUX内核里如何实现DMA处理。Montavista 的Linux-2.6.18 V4L2驱动源码已经帮客户实现VPFE和VPBE的处理，他们的源码目录是linux-2.6.18_pro500\drivers\media\video\和linux-2.6.18_pro500\drivers\media\video\davinci目录。对于LINUX驱动工程师，首先先按以下三个图配置Montavista linux-2.6.18_pro500的内核，让linux-2.6.18_pro500支持V4L2。
  ![这里写图片描述](http://img.blog.csdn.net/20170625210529047?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMDE4NjAwMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
@@ -53,7 +53,7 @@ videodev.c
 
 本公司的开发板采用的是TVP5158芯片，见http://zjbintsystem.blog.51cto.com/964211/392221。移植修改基本上是上面的几个VPFE采集源文件。至于我们板子上的美光MT9M112、MT9D112等类似CMOS芯片的控制，基本也是修改上面的几个VPFE采集源文件。
  
-###**第三节   V4L2例子源码分析**
+### **第三节   V4L2例子源码分析**
  
 在dvsdk_2_00_00_22\PSP_02_00_00_140\examples\dm644x\v4l2里，有V4L2应用的例子，里边有v4l2_mmap_loopback.c和v4l2_userptr_loopback.c，我们主要分析v4l2_mmap_loopback.c。
 很多网友介绍LINUX V4L2视频原理都是从本节开始的，以TVP5146采集芯片为例。
@@ -310,7 +310,7 @@ read、write方式:在用户空间和内核空间不断拷贝数据，占用了�
       }
 可以看出LOOPBACK方式的操作memcpy(dest, src, disppitch)，直接把采集的数据(720x576x2)字节放到视频输出缓冲dest，disppitch=1440,，就是一行UYVY的自己是1440。
  
-###**第四节   DVSDK2.0有关V4L2的例子分析**
+### **第四节   DVSDK2.0有关V4L2的例子分析**
  
 有上面的介绍，我们可以深入学习DM6446 DVSDK2.0有关V4L2的例子。
 
@@ -321,5 +321,5 @@ V4L2的例子函数为capture.c和display.c，他们不像第三节介绍的v4l2
 
 dvsdk_2_00_00_22\dmai_1_20_00_06\packages\ti\sdo\_dmai\linux里的c文件就是V4L2和内核对接的源文件，好好学习这些例子，对大家做DAVINCI嵌入式产品非常有好处，本人也是从这些例子里学到很多LINUX的东西。
  
-###**第五节 后记**
+### **第五节 后记**
 新的产品即将出来，根据一些客户的要求，我们重新对DM365/DM368进行第2轮PCB设计，我想很快就可以和大家探讨高清的方案，深圳市桐烨科技有限公司专门提供对应硬件平台和产品方案支持，我们专注ARM+DSP的产品方案和项目设计，IVS（智能视频监控）设计，810MHz的DM6446核心板将更加满足算法的要求。同时我们根据客户的项目需求，以深圳的速度（产品一条龙服务）帮客户设计产品。
