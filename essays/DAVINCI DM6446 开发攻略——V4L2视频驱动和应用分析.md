@@ -56,8 +56,9 @@ videodev.c
 ### **第三节   V4L2例子源码分析**
  
 在dvsdk_2_00_00_22\PSP_02_00_00_140\examples\dm644x\v4l2里，有V4L2应用的例子，里边有v4l2_mmap_loopback.c和v4l2_userptr_loopback.c，我们主要分析v4l2_mmap_loopback.c。
-很多网友介绍LINUX V4L2视频原理都是从本节开始的，以TVP5146采集芯片为例。
-####**1、Makefile修改**
+很多网友介绍LINUX V4L2视频原理都是从本节开始的，以TVP5146采集芯片为例。   
+
+#### **1、Makefile修改**
 下面的Makefile的内容也适合于其他LINUX应用程序，
 
 	# Makefile for v4l2 application
