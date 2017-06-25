@@ -8,7 +8,7 @@
 
 有关DM6446 DAVINCI视频处理技术，有两个文档：VPFE sprue38ec.pdf和VPBE sprue37c.pdf，必须要看看的。下图是DAVINCI视频处理技术的框图，VPSS（视频处理子系统）包含VPFE和VPBE，VPFE负责前端视频采集和处理，而VPBE负责后端视频输出，通过OSD和VECN直接输出到DACS（数字转模拟输出口，一共4个通道DAC，通过外围视频编码芯片转换成复合视频CVBS输出到普通电视机）或者直接输出到LCD（DM6446支持RGB24位信号输出到数字LCD屏，4.3寸，7寸屏等）。
 
-![这里写图片描述](http://img.blog.csdn.net/20170625210504446?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMDE4NjAwMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![这里写图片描述](https://github.com/Yunpentium/notes/blob/master/images/DAVINCI%20DM6446%20%E5%BC%80%E5%8F%91%E6%94%BB%E7%95%A5%E2%80%94%E2%80%94V4L2%E8%A7%86%E9%A2%91%E9%A9%B1%E5%8A%A8%E5%92%8C%E5%BA%94%E7%94%A8%E5%88%86%E6%9E%90/1.jpg)
 图1 DAVINCI VPSS框图
  
 从图1可以看出，VPFE系统可以接CCD或者CMOS sensor，同时也可以接视频解码芯片，目前Montavista Linux-2.6.18驱动给出的TI EVM驱动支持MT9T001 CMOS芯片和TVP5146视频解码芯片，VPFE采用RAW模式控制MT9T001 CMOS芯片，数码相机产品基本是这种应用方式，而VPFE采用BT601或BT656的方式控制TVP5146视频解码芯片，很多做安防、机器视觉等的方案都是这种模式，因为这种方式最普通，视频前端买个普通的CCD摄像机，接条视频线和电源，就可以用通过类似TVP5146的芯片采集到图像了，本人也着重介绍这种情况。
@@ -21,15 +21,15 @@ VPFE和VPBE所有的数据交换都是在DDR上处理，VPFE采集的视频数�
 ### **第二节   V4L2采集驱动**
  
 对应上面的硬件处理过程，软件工程师最关心的是如何配置VPFE和VPBE的寄存器，如何实现DDR的视频数据视频缓冲处理，在LINUX内核里如何实现DMA处理。Montavista 的Linux-2.6.18 V4L2驱动源码已经帮客户实现VPFE和VPBE的处理，他们的源码目录是linux-2.6.18_pro500\drivers\media\video\和linux-2.6.18_pro500\drivers\media\video\davinci目录。对于LINUX驱动工程师，首先先按以下三个图配置Montavista linux-2.6.18_pro500的内核，让linux-2.6.18_pro500支持V4L2。
- ![这里写图片描述](http://img.blog.csdn.net/20170625210529047?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMDE4NjAwMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+ ![这里写图片描述](https://github.com/Yunpentium/notes/blob/master/images/DAVINCI%20DM6446%20%E5%BC%80%E5%8F%91%E6%94%BB%E7%95%A5%E2%80%94%E2%80%94V4L2%E8%A7%86%E9%A2%91%E9%A9%B1%E5%8A%A8%E5%92%8C%E5%BA%94%E7%94%A8%E5%88%86%E6%9E%90/2.jpg)
 图2 配置Multimedia devices
 
 按图2选择Video For Linux，然后进入“Video Capture Adapters”，按图-3配置DAVINCI视频采集选项， 
-![这里写图片描述](http://img.blog.csdn.net/20170625210603036?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMDE4NjAwMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![这里写图片描述](https://github.com/Yunpentium/notes/blob/master/images/DAVINCI%20DM6446%20%E5%BC%80%E5%8F%91%E6%94%BB%E7%95%A5%E2%80%94%E2%80%94V4L2%E8%A7%86%E9%A2%91%E9%A9%B1%E5%8A%A8%E5%92%8C%E5%BA%94%E7%94%A8%E5%88%86%E6%9E%90/3.jpg)
 图 3 配置采集选项
 
  同在一个配置界面，选择和进入“Encoders and Decoders”，配置VPBE实现视频输出处理。
- ![这里写图片描述](http://img.blog.csdn.net/20170625210615109?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMDE4NjAwMQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+ ![这里写图片描述](https://github.com/Yunpentium/notes/blob/master/images/DAVINCI%20DM6446%20%E5%BC%80%E5%8F%91%E6%94%BB%E7%95%A5%E2%80%94%E2%80%94V4L2%E8%A7%86%E9%A2%91%E9%A9%B1%E5%8A%A8%E5%92%8C%E5%BA%94%E7%94%A8%E5%88%86%E6%9E%90/4.jpg)
 图-4 配置VPBE DISPLAY选项
  
 然后再去到驱动driver文件夹找到相关文件。
