@@ -17,5 +17,7 @@ Vim 是 Linux 系统上的最著名的文本/代码编辑器，也是早年的 V
 ![2](../images/Windows下Vim编辑器使用（一）——Vim介绍和安装/2.png) 图2   
 
 
-3、配置文件_vimrc   
-顺便提一句，在unix/linux中，文件名可以以”.”开头，表明此文件是隐藏的。而在windows中，不允许文件名以”.”开头，所以，windows版本的vim，将读取_vimrc来做为自己的配置文件。在今后使用Vim的日子里，你会频繁的更改你的_vimrc.
+3、配置文件_vimrc   
+
+顺便提一句，在unix/linux中，文件名可以以”.”开头，表明此文件是隐藏的。而在windows中，不允许文件名以”.”开头，所以，windows版本的vim，将读取_vimrc来做为自己的配置文件。   
+在今后使用Vim的日子里，你会频繁的更改你的_vimrc.
