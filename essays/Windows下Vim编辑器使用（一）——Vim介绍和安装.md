@@ -5,7 +5,7 @@ Vim 是 Linux 系统上的最著名的文本/代码编辑器，也是早年的 V
 
 而 gVim 则是其 Windows 版，下文介绍如何安装使用。   
 
-# 二、Vim安装(其实是gVim)
+# 二、Vim安装(Windows下其实是gVim)
 
 1、下载 GVIM   
 
